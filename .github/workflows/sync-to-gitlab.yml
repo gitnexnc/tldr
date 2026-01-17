@@ -14,11 +14,15 @@ jobs:
         with:
           fetch-depth: 0
           
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
       - name: Push to GitLab
         env:
-          GITLAB_TOKEN: ${{ secrets.glpat-75i3ZwRL66S6t7sJtQEAGW86MQp1Ojh3ZjI4Cw.01.1207dsjv6 }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/nexnc/tldr.git
-          git push gitlab main --force
-          git push gitlab --all
-          git push gitlab --tags
+          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/nexnc/tldr.git || git remote set-url gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/nexnc/tldr.git
+          git push gitlab main --force --verbose
+          echo "✓ Successfully pushed to GitLab"
